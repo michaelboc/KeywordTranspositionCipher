@@ -13,18 +13,31 @@
 #include <stdio.h>
 #include <string.h>
 
+#define CHAR_TABLE sizeof(char)<<3
+
 
 // Function which replaces any found duplicates with NULL characters. 
 //
-// @param keyword         string which the function will investigate for
+// @param keyword       string which the function will investigate for
 //                      duplicates.
-char* eliminatedups( char* keyword ){
+// @returns             int which represents the length of the keyword
+unsigned char eliminatedups( char* keyword ){
+    // Array to store flags which indicate that a character has been found
+    char foundchars[CHAR_TABLE] = { 0 }; 
+    
     // Iterates through the string until a NULL character is found, 
     unsigned char i = 0;
     while( keyword[i] != '\0' ){
-    // If     
-
+        // First time encountering a word
+        if( foundchars[keyword[i]] == 0 ){
+            foundchars[keyword[i++]] = 1;
+        }  
+        else {
+            keyword[i++] = NULL;
+        } 
     }
+    // Returns the length of the  
+    return ++i;
 }
 
 
@@ -47,6 +60,15 @@ int comparator( const void* c1, const void* c2 ){
 char* makecipher( char* keyword ){
     // Sorts the keyword 
     qsort( keyword, strlen(keyword), sizeof(char), comparator); 
+    // Eliminate dups, and find the length of the keyword
+    unsigned char keylen = eliminatedups( keyword );  
+    // Allocates on to the heap the lookup table
+    char* cipher =  
+
+    // Populates the lookup table
+    for( unsigned char i = 0; i <= keylen; i++ ){
+         
+    }
 
     return NULL;
 } 
