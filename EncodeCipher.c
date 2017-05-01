@@ -14,6 +14,7 @@
 #include <string.h>
 
 #define CHAR_TABLE sizeof(char)<<3
+#define CIPHER_LEN 26
 
 
 // Function which replaces any found duplicates with NULL characters. 
@@ -28,6 +29,10 @@ unsigned char eliminatedups( char* keyword ){
     // Iterates through the string until a NULL character is found, 
     unsigned char i = 0;
     while( keyword[i] != '\0' ){
+        // Santizes capital letters
+        if( keyword[i] > 'Z' ){
+            keyword[i] = tolower(keyword[i]);
+        }
         // First time encountering a word
         if( foundchars[keyword[i]] == 0 ){
             foundchars[keyword[i++]] = 1;
@@ -59,12 +64,14 @@ int comparator( const void* c1, const void* c2 ){
 //                      use to encode the plain text data.
 char* makecipher( char* keyword ){
     // Sorts the keyword 
+    unsigned char keylen = eliminatedups( keyword );  
     qsort( keyword, strlen(keyword), sizeof(char), comparator); 
     // Eliminate dups, and find the length of the keyword
-    unsigned char keylen = eliminatedups( keyword );  
+    printf("%s", keyword);    
     // Allocates on to the heap the lookup table
-    char* cipher =  
+    char* cipher = malloc( sizeof(char) * CIPHER_LEN); 
 
+    printf("%s", keyword);    
     // Populates the lookup table
     for( unsigned char i = 0; i <= keylen; i++ ){
          
@@ -94,6 +101,5 @@ char* encryptor( char** cipherlookup, char* plaindata ){
 int main( int argc, char* argv[] ) {
     makecipher(argv[1]);
     
-    printf("%s", argv[1]);    
     return EXIT_SUCCESS;
 }
