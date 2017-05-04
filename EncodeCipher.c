@@ -22,11 +22,9 @@
 // @param keyword       string which the function will investigate for
 //                      duplicates.
 // @returns             int which represents the length of the keyword
-unsigned char eliminatedups( char* keyword ){
-    // Array to store flags which indicate that a character has been found
-    char foundchars[CHAR_TABLE] = { 0 }; 
+unsigned char eliminatedups( char* keyword, char* foundchars ){
     
-    // Iterates through the string until a NULL character is found, 
+	// Iterates through the string until a NULL character is found, 
     unsigned char i = 0;
     while( keyword[i] != '\0' ){
         // Santizes capital letters
@@ -41,8 +39,8 @@ unsigned char eliminatedups( char* keyword ){
             keyword[i++] = NULL;
         } 
     }
-    // Returns the length of the  
-    return ++i;
+    
+	return ++i;
 }
 
 
@@ -63,21 +61,27 @@ int comparator( const void* c1, const void* c2 ){
 // @param cipherword    this is the password which the translation encryptr will
 //                      use to encode the plain text data.
 char* makecipher( char* keyword ){
+   
+	// Eliminate dups, and find the length of the keyword
+    char foundchars[CHAR_TABLE] = { 0 }; 
+    unsigned char keylen = eliminatedups( keyword, foundchars );  
     // Sorts the keyword 
-    unsigned char keylen = eliminatedups( keyword );  
     qsort( keyword, strlen(keyword), sizeof(char), comparator); 
-    // Eliminate dups, and find the length of the keyword
-    printf("%s", keyword);    
-    // Allocates on to the heap the lookup table
+   
+	// Generates the cipher below 
     char* cipher = malloc( sizeof(char) * CIPHER_LEN); 
-
-    printf("%s", keyword);    
-    // Populates the lookup table
-    for( unsigned char i = 0; i <= keylen; i++ ){
-         
+    for( unsigned char i = 0; i < keylen; i++ ){
+		cipher[i] = keyword[i];
     }
-
-    return NULL;
+	
+	// Populates the rest of the array with the alphabet
+	for( unsigned char j = 'a'; j <= 'z'; j++ ){
+		if ( foundchars[j] == 0 ){
+			cipher[j] = j;	
+		}	
+	}	
+	
+	return cipher;    
 } 
 
 
@@ -99,7 +103,8 @@ char* encryptor( char** cipherlookup, char* plaindata ){
 //
 // @param argc The count of arug 
 int main( int argc, char* argv[] ) {
-    makecipher(argv[1]);
-    
+    char* test = makecipher(argv[1]);
+  	printf("%s", test); 
+	 
     return EXIT_SUCCESS;
 }
