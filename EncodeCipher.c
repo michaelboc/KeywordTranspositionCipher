@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define CHAR_TABLE sizeof(char)<<3
+#define CHAR_TABLE sizeof(char)<<8
 #define CIPHER_LEN 26
 
 
@@ -26,10 +26,12 @@ unsigned char eliminatedups( char* keyword, char* foundchars ){
     
 	// Iterates through the string until a NULL character is found, 
     unsigned char i = 0;
+    keyword++;
     while( keyword[i] != '\0' ){
         // Santizes capital letters
-        if( keyword[i] > 'Z' ){
+        if( keyword[i] <= 'Z' ){
             keyword[i] = tolower(keyword[i]);
+            
         }
         // First time encountering a word
         if( foundchars[keyword[i]] == 0 ){
@@ -40,7 +42,7 @@ unsigned char eliminatedups( char* keyword, char* foundchars ){
         } 
     }
     
-	return ++i;
+	return i;
 }
 
 
@@ -70,14 +72,15 @@ char* makecipher( char* keyword ){
    
 	// Generates the cipher below 
     char* cipher = malloc( sizeof(char) * CIPHER_LEN); 
-    for( unsigned char i = 0; i < keylen; i++ ){
+    unsigned char i = 0;   
+    for( ; i < keylen; i++ ){
 		cipher[i] = keyword[i];
     }
 	
 	// Populates the rest of the array with the alphabet
 	for( unsigned char j = 'a'; j <= 'z'; j++ ){
 		if ( foundchars[j] == 0 ){
-			cipher[j] = j;	
+			cipher[i++] = j;	
 		}	
 	}	
 	
