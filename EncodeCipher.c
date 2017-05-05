@@ -26,19 +26,19 @@ unsigned char eliminatedups( char* keyword, char* foundchars ){
     
 	// Iterates through the string until a NULL character is found, 
     unsigned char i = 0;
-    keyword++;
-    while( keyword[i] != '\0' ){
+    while( *keyword != '\0' ){
         // Santizes capital letters
-        if( keyword[i] <= 'Z' ){
-            keyword[i] = tolower(keyword[i]);
-            
+        if( *keyword <= 'Z' ){
+            *keyword = tolower(keyword[i]);
         }
         // First time encountering a word
-        if( foundchars[keyword[i]] == 0 ){
-            foundchars[keyword[i++]] = 1;
+        if( foundchars[*keyword] == 0 ){
+            foundchars[*keyword] = 1;
+            keyword++, i++; 
         }  
         else {
-            keyword[i++] = NULL;
+            *keyword = NULL;
+            keyword++; 
         } 
     }
     
@@ -64,10 +64,9 @@ int comparator( const void* c1, const void* c2 ){
 //                      use to encode the plain text data.
 char* makecipher( char* keyword ){
    
-	// Eliminate dups, and find the length of the keyword
+	// Eliminate dups, finds the length of the keyword, and sorts the keyword
     char foundchars[CHAR_TABLE] = { 0 }; 
     unsigned char keylen = eliminatedups( keyword, foundchars );  
-    // Sorts the keyword 
     qsort( keyword, strlen(keyword), sizeof(char), comparator); 
    
 	// Generates the cipher below 
