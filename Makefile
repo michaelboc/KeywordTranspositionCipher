@@ -1,7 +1,8 @@
 TARGET = EncodeCipher
 LIBS = 
 CC = gcc
-CFLAGS =  -ggdb -Wall -Wextra -pedantic -std=c99
+CFLAGS =  -ggdb -std=c99
+# -Wall -Wextra -pedantic
 
 .PHONY: default all clean
 
