@@ -65,19 +65,18 @@ cipher* makecipher( char* keyword ){
 	
 	// Eliminate dups, finds the length of the keyword, and sorts the keyword
     char foundchars[CHAR_TABLE] = { 0 }; 
-    newkey->key_len = eliminatedups( keyword, foundchars );  
+    newkey->keylen = eliminatedups( keyword, foundchars );  
     
 	unsigned char i = 0;   
-    for( ; i < keylen; i++ ){
-		newkey->cipher_key[i] = keyword[i];
+    for( ; i < newkey->keylen; i++ ){
+		newkey->cipherkey[i] = keyword[i];
     }
 	
 	// Populates the rest of the array with the alphabet
 	for( unsigned char j = 'a'; j <= 'z'; j++ ){
 		if ( foundchars[j] == 0 ){
-			new->cipher_key[i++] = j;	
+			newkey->cipherkey[i++] = j;	
 		}	
 	}	
-	return cipher_key;    
-
+    return NULL;
 } 

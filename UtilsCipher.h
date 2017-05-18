@@ -23,9 +23,9 @@
 //
 typedef struct cipher_struct {
 	// String to represent the cipher key	
-	char cipher_key[CHAR_TABLE];
+	char cipherkey[CHAR_TABLE];
 	// Length of the keyword
-	unsigned char key_len;		
+	unsigned char keylen;		
 
 } cipher;
 
@@ -43,7 +43,7 @@ unsigned char eliminatedups( char* keyword, char* foundchars );
 //
 // @param cipherword    this is the password which the translation encryptr will
 //                      use to encode the plain text data.
-char* makecipher( char* keyword );
+cipher* makecipher( char* keyword );
 
 
 // Compare function intended to help sort the characters in the user provided
