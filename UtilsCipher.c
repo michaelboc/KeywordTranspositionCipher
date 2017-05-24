@@ -59,24 +59,43 @@ int comparator( const void* c1, const void* c2 ){
 // @param cipherword    this is the password which the translation encryptr will
 //                      use to encode the plain text data.
 cipher* makecipher( char* keyword ){
-   
-	// Generates the cipher below 
+	
+	// Generates the cipher 
     cipher* newkey  = malloc( sizeof(cipher) ); 
 	
-	// Eliminate dups, finds the length of the keyword, and sorts the keyword
+    // Eliminate dups, finds the length of the keyword, and sorts the keyword
     char foundchars[CHAR_TABLE] = { 0 }; 
     newkey->keylen = eliminatedups( keyword, foundchars );  
     
-	unsigned char i = 0;   
+    //Generates the ciphertext matrix 
+	unsigned char i = 0;  
+    char ciphermatrix[newkey->keylen];  
     for( ; i < newkey->keylen; i++ ){
-		newkey->cipherkey[i] = keyword[i];
+		ciphermatrix[i] = keyword[i];
     }
-	
+    	
 	// Populates the rest of the array with the alphabet
-	for( unsigned char j = 'a'; j <= 'z'; j++ ){
+	for( char j = 'a'; j <= 'z'; j++ ){
 		if ( foundchars[j] == 0 ){
-			newkey->cipherkey[i++] = j;	
+			ciphermatrix[i++] = j;	
 		}	
-	}	
-    return NULL;
+	}
+    
+    // Iterate through each of the columns in the matrix
+    i = 0; 
+    for( char j = 0; i < newkey->keylen; j++ ){
+        // While loop to collect the entire column 
+        for( char row = 0; ; row++ ){
+            char charptr = ciphermatrix[ (row*newkey->keylen) + j ]; 
+            if( charptr != '\0' ){
+                newkey->cipherkey[i++] = charptr;
+            }
+            else{
+                break;
+            } 
+        } 
+    }  
+    
+    return newkey;
+
 } 

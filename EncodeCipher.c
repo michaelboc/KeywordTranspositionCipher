@@ -17,8 +17,15 @@
 // @param cipherlookup  a two dimentional array which maps the orginal ASCII
 //                      value  to the encrypted ASCII values
 // @param plaindata     the plaintext data which this function will encrypt
-char* encrypt( char* cipher, char* plaintext ){
-	
+char* encrypt( cipher* cipher, char* plaintext ){
+    // Creates a string which will house the encrypted text
+    size_t textlen = strlen( plaintext ); 
+    char* codedtext = malloc( sizeof(char) * textlen );   
+    // Loop to interate through and generate the secret text
+    for( size_t i = 0; i < textlen; i++ ){
+        codedtext[i] = cipher->cipherkey[i]; 
+    } 
+     	
  
     return NULL;
 }
@@ -31,9 +38,13 @@ char* encrypt( char* cipher, char* plaintext ){
 //
 // @param argc The count of arug 
 int main( int argc, char* argv[] ) {
-    char* test = makecipher(argv[1]);
+    // Create the key which will encrypt the plaintext data
+    cipher* secretkey = makecipher(argv[1]);
 
-  	printf("%s", test); 
+    //Encrypts the plaintext data
+    char* codedtext = encrypt( secretkey, argv[2] );    
+
+  	printf("%s", secretkey->cipherkey); 
 	 
     return EXIT_SUCCESS;
 }
