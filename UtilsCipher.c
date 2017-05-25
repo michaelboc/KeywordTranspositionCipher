@@ -68,8 +68,8 @@ cipher* makecipher( char* keyword ){
     newkey->keylen = eliminatedups( keyword, foundchars );  
     
     //Generates the ciphertext matrix 
-	unsigned char i = 0;  
-    char ciphermatrix[newkey->keylen];  
+   	char i = 0; 
+	char ciphermatrix[CHAR_TABLE];  
     for( ; i < newkey->keylen; i++ ){
 		ciphermatrix[i] = keyword[i];
     }
@@ -88,7 +88,7 @@ cipher* makecipher( char* keyword ){
         for( char row = 0; ; row++ ){
             char charptr = ciphermatrix[ (row*newkey->keylen) + j ]; 
             if( charptr != '\0' ){
-                newkey->cipherkey[i++] = charptr;
+                newkey->cipherkey['a' + i++] = charptr;
             }
             else{
                 break;
