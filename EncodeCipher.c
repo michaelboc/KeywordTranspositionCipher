@@ -20,14 +20,13 @@
 char* encrypt( cipher* cipher, char* plaintext ){
     // Creates a string which will house the encrypted text
     size_t textlen = strlen( plaintext ); 
-    char* codedtext = malloc( sizeof(char) * textlen );   
+    char* codetext = malloc( sizeof(char) * textlen );   
     // Loop to interate through and generate the secret text
     for( size_t i = 0; i < textlen; i++ ){
-        codedtext[i] = cipher->cipherkey[i]; 
+        codetext[i] = cipher->cipherkey[plaintext[i]]; 
     } 
-     	
  
-    return NULL;
+    return codetext;
 }
 
 
@@ -42,9 +41,9 @@ int main( int argc, char* argv[] ) {
     cipher* secretkey = makecipher(argv[1]);
 
     //Encrypts the plaintext data
-    char* codedtext = encrypt( secretkey, argv[2] );    
+    char* codetext = encrypt( secretkey, argv[2] );    
 
-  	printf("%s", secretkey->cipherkey); 
+  	printf("%s", codetext); 
 	 
     return EXIT_SUCCESS;
 }

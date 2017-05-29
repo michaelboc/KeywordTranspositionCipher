@@ -69,7 +69,7 @@ cipher* makecipher( char* keyword ){
     
     //Generates the ciphertext matrix 
    	char i = 0; 
-	char ciphermatrix[CHAR_TABLE];  
+	char ciphermatrix[CHAR_TABLE] = { '\0' };  
     for( ; i < newkey->keylen; i++ ){
 		ciphermatrix[i] = keyword[i];
     }
@@ -83,7 +83,7 @@ cipher* makecipher( char* keyword ){
     
     // Iterate through each of the columns in the matrix
     i = 0; 
-    for( char j = 0; i < newkey->keylen; j++ ){
+    for( char j = 0; j < newkey->keylen; j++ ){
         // While loop to collect the entire column 
         for( char row = 0; ; row++ ){
             char charptr = ciphermatrix[ (row*newkey->keylen) + j ]; 
