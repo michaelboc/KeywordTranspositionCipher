@@ -33,7 +33,7 @@ unsigned char eliminatedups( char* keyword, char* foundchars ){
             keyword++, i++; 
         }  
         else {
-            *keyword = NULL;
+            *keyword = '\0';
             keyword++; 
         } 
     }

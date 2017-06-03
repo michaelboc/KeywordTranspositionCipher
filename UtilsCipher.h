@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #define CHAR_TABLE sizeof(char)<<8
 #define CIPHER_LEN 26

@@ -11,7 +11,6 @@
 
 #include "UtilsCipher.h"
 
-
 // This function will take a keyword, and plaintext data and encrypts the data 
 //
 // @param cipherlookup  a two dimentional array which maps the orginal ASCII
@@ -23,7 +22,12 @@ char* encrypt( cipher* cipher, char* plaintext ){
     char* codetext = malloc( sizeof(char) * textlen );   
     // Loop to interate through and generate the secret text
     for( size_t i = 0; i < textlen; i++ ){
-        codetext[i] = cipher->cipherkey[plaintext[i]]; 
+		// Sanitize capitial letters 		
+		if( *plaintext <= 'Z' ){
+            *plaintext = tolower(*plaintext);
+        }
+		// Creates the output
+        codetext[i] = cipher->cipherkey[*plaintext++]; 
     } 
  
     return codetext;
@@ -40,10 +44,12 @@ int main( int argc, char* argv[] ) {
     // Create the key which will encrypt the plaintext data
     cipher* secretkey = makecipher(argv[1]);
 
-    //Encrypts the plaintext data
-    char* codetext = encrypt( secretkey, argv[2] );    
-
-  	printf("%s", codetext); 
-	 
+	// Iterates through each of the provided words into the commandline
+	for( unsigned char i = 2; i < argc; i++ ){
+    	//Codes the word, and print it to standard out
+    	char* codetext = encrypt( secretkey, argv[i] );    
+  		printf("%s ", codetext); 
+	} 
+	// End of program
     return EXIT_SUCCESS;
 }
