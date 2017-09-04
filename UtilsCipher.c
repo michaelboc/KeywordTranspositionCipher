@@ -9,9 +9,9 @@
 //
 /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// ///
 
- 
-#include "UtilsCipher.h"
 
+// The header file that this code is a implementation of 
+#include "UtilsCipher.h"
 
 // Function which replaces any found duplicates with NULL characters. 
 //
@@ -58,7 +58,7 @@ int comparator( const void* c1, const void* c2 ){
 //
 // @param cipherword    this is the password which the translation encryptr will
 //                      use to encode the plain text data.
-cipher* makecipher( char* keyword ){
+cipher* makecipher( char* keyword, char mode ){
 	
 	// Generates the cipher 
     cipher* newkey  = malloc( sizeof(cipher) ); 
@@ -73,29 +73,47 @@ cipher* makecipher( char* keyword ){
     for( ; i < newkey->keylen; i++ ){
 		ciphermatrix[i] = keyword[i];
     }
-    	
+			
 	// Populates the rest of the array with the alphabet
 	for( char j = 'a'; j <= 'z'; j++ ){
 		if ( foundchars[j] == 0 ){
 			ciphermatrix[i++] = j;	
 		}	
 	}
-    
-    // Iterate through each of the columns in the matrix
-    i = 0; 
-    for( char j = 0; j < newkey->keylen; j++ ){
-        // While loop to collect the entire column 
-        for( char row = 0; ; row++ ){
-            char charptr = ciphermatrix[ (row*newkey->keylen) + j ]; 
-            if( charptr != '\0' ){
-                newkey->cipherkey['a' + i++] = charptr;
-            }
-            else{
-                break;
-            } 
-        } 
-    }  
-    
-    return newkey;
+
+	if( mode != 0 ){ 
+		// Iterate through each of the columns in the matrix
+		i = 0; 
+		for( char j = 0; j < newkey->keylen; j++ ){
+			// While loop to collect the entire column 
+			for( char row = 0; ; row++ ){
+				char charptr = ciphermatrix[ (row*newkey->keylen) + j ]; 
+				if( charptr != '\0' ){
+					newkey->cipherkey['a' + i++] = charptr;	
+				}
+				else{
+					break;
+				}	
+			} 
+		}
+   	}
+	else{
+		// Iterate through each of the columns in the matrix
+		i = 0; 
+		for( char j = 0; j < newkey->keylen; j++ ){
+			// While loop to collect the entire column 
+			for( char row = 0; ; row++ ){
+				char charptr = ciphermatrix[ (row*newkey->keylen) + j ]; 
+				if( charptr != '\0' ){
+					newkey->cipherkey[charptr] = ('a' + i++);	
+				}
+				else{
+					break;
+				}	
+			} 
+		}
+	} 
+	
+	return newkey;
 
 } 
