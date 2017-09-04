@@ -1,6 +1,6 @@
 // 
 // @author Michael Boc <email@michaelboc.com>
-// @date April 23, 2017
+// @date Semptember, 4 2017
 // @filename EncodeCipher.c
 // @language C (99 Dialect) 
 //
@@ -13,11 +13,16 @@
 // The header file that this code is a implementation of 
 #include "UtilsCipher.h"
 
-// Function which replaces any found duplicates with NULL characters. 
+
+// Function which replaces any found duplicates with NULL characters. This
+// function will keep count of the length of the provided string and return this
+// information.
 //
 // @param keyword       string which the function will investigate for
 //                      duplicates.
-// @returns             int which represents the length of the keyword
+//
+// @param foundchars	an array which contains desribes which letters of the
+// 						alphabet have been found in the keyword input string	
 unsigned char eliminatedups( char* keyword, char* foundchars ){
     
 	// Iterates through the string until a NULL character is found, 
@@ -46,18 +51,30 @@ unsigned char eliminatedups( char* keyword, char* foundchars ){
 // keyword
 //
 // @param c1            the first object being compared by the function
+//
 // @param c2            the second object being compared by the function
+//
+// @return				returns an int describing which number is of greater
+// 						value
 int comparator( const void* c1, const void* c2 ){
     
     return ( *(char*)c1 - *(char*)c2 );
 }
 
 
-// This function creates an array representing a look up table for the cipher
-// text.
+// This function create the cipher object which contains information about the
+// cipher lookup table. This lookup table will be use later to encode or decode
+// the user provided data. 
 //
 // @param cipherword    this is the password which the translation encryptr will
 //                      use to encode the plain text data.
+//
+// @param mode			this character representu the current mode that the
+// 						function should operate in. The value 0 for ENCODE, and
+// 						any other value for decode
+//
+// @returns				a cipher object which contains the lookup table for the
+// 						cipher 
 cipher* makecipher( char* keyword, char mode ){
 	
 	// Generates the cipher 
@@ -81,7 +98,7 @@ cipher* makecipher( char* keyword, char mode ){
 		}	
 	}
 
-	if( mode != 0 ){ 
+	if( mode != ENCODE ){ 
 		// Iterate through each of the columns in the matrix
 		i = 0; 
 		for( char j = 0; j < newkey->keylen; j++ ){
@@ -116,4 +133,32 @@ cipher* makecipher( char* keyword, char mode ){
 	
 	return newkey;
 
-} 
+}
+
+
+// This function will take a keyword, and plaintext data and encrypts the data 
+//
+// @param cipherlookup  a two dimentional array which maps the orginal ASCII
+//                      value  to the encrypted ASCII values
+//
+// @param plaindata     the plaintext data which this function will encrypt
+//
+// @returns				a string which represents either the ciphertext or plain
+// 						text depending on the mode
+char* transcribe( cipher* cipher, char* plaintext ){
+    
+	// Creates a string which will house the encrypted text
+    size_t textlen = strlen( plaintext ); 
+    char* codetext = malloc( sizeof(char) * (textlen+1) );   
+    // Loop to interate through and generate the secret text
+    for( size_t i = 0; i < textlen; i++ ){
+		// Sanitize capitial letters 		
+		if( *plaintext <= 'Z' ){
+            *plaintext = tolower(*plaintext);
+        }
+		// Creates the output
+        codetext[i] = cipher->cipherkey[*plaintext++]; 
+    } 
+ 
+    return codetext;
+}
